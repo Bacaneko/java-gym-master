@@ -3,13 +3,9 @@ package ru.yandex.practicum.gym;
 import java.util.Objects;
 
 public class Coach {
-
-    //фамилия
-    private String surname;
-    //имя
-    private String name;
-    //отчество
-    private String middleName;
+    private final String surname;
+    private final String name;
+    private final String middleName;
 
     public Coach(String surname, String name, String middleName) {
         this.surname = surname;
