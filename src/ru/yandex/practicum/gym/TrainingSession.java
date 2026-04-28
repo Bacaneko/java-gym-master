@@ -1,14 +1,10 @@
 package ru.yandex.practicum.gym;
 
-public class TrainingSession implements Comparable{
+public class TrainingSession implements Comparable<TrainingSession> {
 
-    //группа
     private final Group group;
-    //тренер
     private final Coach coach;
-    //день недели
     private final DayOfWeek dayOfWeek;
-    //время начала занятия
     private final TimeOfDay timeOfDay;
 
     public TrainingSession(Group group, Coach coach, DayOfWeek dayOfWeek, TimeOfDay timeOfDay) {
@@ -35,9 +31,10 @@ public class TrainingSession implements Comparable{
     }
 
     @Override
-    public int compareTo(Object o) {
-        TrainingSession trainingSession = (TrainingSession) o;
-        return (this.timeOfDay.getHours() + this.timeOfDay.getMinutes())
-                - (trainingSession.timeOfDay.getHours() + this.timeOfDay.getMinutes());
+    public int compareTo(TrainingSession trainingSession) {
+        int thisTime = this.timeOfDay.getHours() * 60 + this.timeOfDay.getMinutes();
+        int otherTime = trainingSession.timeOfDay.getHours() * 60 + trainingSession.timeOfDay.getMinutes();
+
+        return Integer.compare(thisTime, otherTime);
     }
 }
