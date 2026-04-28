@@ -8,26 +8,16 @@ public class Timetable {
     private final HashMap<DayOfWeek, TreeMap<TimeOfDay, List<TrainingSession>>> timetable = new HashMap<>();
 
     public void addNewTrainingSession(TrainingSession trainingSession) {
-        if (timetable.containsKey(trainingSession.getDayOfWeek())) {
-            if (timetable.get(trainingSession.getDayOfWeek()).containsKey(trainingSession.getTimeOfDay())) {
-                TreeMap<TimeOfDay, List<TrainingSession>> session = timetable.get(trainingSession.getTimeOfDay());
-                List<TrainingSession> tempList = session.get(trainingSession.getTimeOfDay());
-                tempList.add(trainingSession);
-                session.put(trainingSession.getTimeOfDay(), tempList);
-            } else {
-                TreeMap<TimeOfDay, List<TrainingSession>> currentTrainingSession = timetable.get(trainingSession.getDayOfWeek());
-                List<TrainingSession> newList = new ArrayList<>();
-                newList.add(trainingSession);
-                currentTrainingSession.put(trainingSession.getTimeOfDay(), newList);
-                timetable.put(trainingSession.getDayOfWeek(), currentTrainingSession);
-            }
-        } else {
-            List<TrainingSession> listTrainingSession = new ArrayList<>();
-            listTrainingSession.add(trainingSession);
-            TreeMap<TimeOfDay, List<TrainingSession>> currentTrainingSession = new TreeMap<>();
-            currentTrainingSession.put(trainingSession.getTimeOfDay(), listTrainingSession);
-            timetable.put(trainingSession.getDayOfWeek(), currentTrainingSession);
-        }
+        DayOfWeek dayOfWeek = trainingSession.getDayOfWeek();
+        TimeOfDay timeOfDay = trainingSession.getTimeOfDay();
+
+        TreeMap<TimeOfDay, List<TrainingSession>> sessionsByTime =
+                timetable.computeIfAbsent(dayOfWeek, day -> new TreeMap<>());
+
+        List<TrainingSession> sessions =
+                sessionsByTime.computeIfAbsent(timeOfDay, time -> new ArrayList<>());
+
+        sessions.add(trainingSession);
     }
 
     public TreeMap<TimeOfDay, List<TrainingSession>> getTrainingSessionsForDay(DayOfWeek dayOfWeek) {
